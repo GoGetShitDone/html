@@ -1,0 +1,121 @@
+<html><head><base href="https://doorsofinfiniteexperiences.com"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doors of Infinite Experiences</title>
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Courier New', monospace;
+    background-color: #000;
+    color: #f6e921;
+    overflow: hidden;
+}
+#universe {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    perspective: 1000px;
+    overflow: hidden;
+}
+.door {
+    position: absolute;
+    width: 100px;
+    height: 200px;
+    background: linear-gradient(45deg,#060840,#320505);
+    border: 2px solid #f6e921;
+    box-shadow: 0 0 10px #f6e921;
+    transform-style: preserve-3d;
+    transition: all 0.5s ease-in-out;
+    cursor: pointer;
+}
+.door:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #f6e921, 0 0 40px #f6e921;
+}
+#info-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 300px;
+}
+@keyframes float {
+    0% { transform: translateY(0px) rotateY(0deg); }
+    50% { transform: translateY(-20px) rotateY(180deg); }
+    100% { transform: translateY(0px) rotateY(360deg); }
+}
+</style>
+</head>
+<body>
+<div id="universe"></div>
+<div id="info-panel">
+    <h2>Doors of Infinite Experiences</h2>
+    <p>Welcome, traveler. Each door leads to a unique simulated reality. Click on a door to embark on your journey.</p>
+    <p>Current visitors: <span id="visitor-count">1,337</span></p>
+</div>
+
+<script>
+const universe = document.getElementById('universe');
+const doorCount = 50;
+const experiences = [
+    "https://doorsofinfiniteexperiences.com/cyberpunk-metropolis",
+    "https://doorsofinfiniteexperiences.com/undersea-civilization",
+    "https://doorsofinfiniteexperiences.com/steampunk-airship",
+    "https://doorsofinfiniteexperiences.com/alien-desert-world",
+    "https://doorsofinfiniteexperiences.com/medieval-fantasy-realm",
+    "https://doorsofinfiniteexperiences.com/post-apocalyptic-wasteland",
+    "https://doorsofinfiniteexperiences.com/time-travel-laboratory",
+    "https://doorsofinfiniteexperiences.com/space-colony",
+    "https://doorsofinfiniteexperiences.com/prehistoric-jungle",
+    "https://doorsofinfiniteexperiences.com/virtual-reality-nexus"
+];
+
+function createDoor(index) {
+    const door = document.createElement('div');
+    door.classList.add('door');
+    door.style.left = `${Math.random() * 90}vw`;
+    door.style.top = `${Math.random() * 90}vh`;
+    door.style.transform = `rotateY(${Math.random() * 360}deg) rotateX(${Math.random() * 360}deg) translateZ(${Math.random() * 500 - 250}px)`;
+    door.style.animation = `float ${5 + Math.random() * 10}s infinite ease-in-out`;
+    
+    door.addEventListener('click', () => {
+        const destination = experiences[Math.floor(Math.random() * experiences.length)];
+        window.location.href = destination;
+    });
+
+    universe.appendChild(door);
+}
+
+for (let i = 0; i < doorCount; i++) {
+    createDoor(i);
+}
+
+setInterval(() => {
+    const visitorCount = document.getElementById('visitor-count');
+    const currentCount = parseInt(visitorCount.textContent.replace(',', ''));
+    const newCount = currentCount + Math.floor(Math.random() * 10) - 3;
+    visitorCount.textContent = newCount.toLocaleString();
+}, 5000);
+</script>
+</body></html>
+
+
+
+
+
+
+
+
+https://drive.google.com/file/d/1CQEkc622D16xh6hRAJE2zAq70e7r6f4A/view?usp=drive_link
+https://drive.google.com/file/d/1U1Ca6LcX8VzBROzFZOJes--KfSLJmEE0/view?usp=drive_link
+https://drive.google.com/file/d/1wUItLIj-FOOYL--fMl55H0k2ILWe5wQi/view?usp=drive_link
+https://drive.google.com/file/d/19nza7Gd5nAPkEasWt7JZIdIaZdb2I-O8/view?usp=drive_link
+https://drive.google.com/file/d/1LBZi6Xu6eXLKeOesVYkW75CH4ndtvPI9/view?usp=drive_link
+https://drive.google.com/file/d/12Jz_XalQvmG-NLLi42jvlFV9Cb5JLxbj/view?usp=drive_link
+https://drive.google.com/file/d/1w5nuDUC5KDOQZirEcnCOsCEc8bZ1Ire6/view?usp=drive_link
+https://drive.google.com/file/d/1q9sx0IPygdQ8q1J-baIHPA5yG7Wazr7R/view?usp=drive_link
+https://drive.google.com/file/d/1luDNeGgIeQZvTmazazUxZpDCXyJV6G_p/view?usp=drive_link
+https://drive.google.com/file/d/1aFNhIZB_0No0erUbylk3YlaL6Vw45YXQ/view?usp=drive_link

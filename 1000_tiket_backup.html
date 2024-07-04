@@ -1,0 +1,133 @@
+<div id="universe"></div>
+
+<style>
+#universe {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    perspective: 1000px;
+    overflow: visible;
+    background-color: #00000000;
+}
+.ticket {
+    position: absolute;
+    width: 100px;
+    height: 200px;
+    background: linear-gradient(90deg, #490B25, #0C083C);
+    border: 2px solid;
+    border-radius: 10px;
+    transform-style: preserve-3d;
+    transition: all 0.5s ease-in-out;
+    cursor: pointer;
+}
+.ticket-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    box-sizing: border-box;
+    font-family: 'roboto';
+    backface-visibility: hidden;
+}
+.ticket-back {
+    transform: rotateY(180deg);
+}
+.ticket:hover {
+    transform: scale(1.1);
+}
+.ticket-header {
+    font-size: 8px;
+    color: #FFFFFF;
+    text-transform: uppercase;
+}
+.ticket-destination {
+    font-size: 12px;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-align: center;
+}
+.ticket-footer {
+    font-size: 6px;
+    color: #FFFFFF;
+    text-align: center;
+}
+@keyframes float {
+    0% { transform: translateY(0px) rotateY(0deg); }
+    50% { transform: translateY(-20px) rotateY(180deg); }
+    100% { transform: translateY(0px) rotateY(360deg); }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const universe = document.getElementById('universe');
+    const ticketCount = 50;
+    const experiencesUrls = {
+    "🏄 Water Activity: Surfing": "https://thrllai.channel.io",
+    "🏄‍♂️ Water Activity: Water Skiing": "https://thrllai.channel.io",
+    "🤿 Water Activity: Freediving": "https://thrllai.channel.io",
+    "🐠 Water Activity: Scuba Diving": "https://thrllai.channel.io",
+    "🚣 Water Activity: Kayaking": "https://thrllai.channel.io",
+    "🛶 Water Activity: Canoeing": "https://thrllai.channel.io",
+    "🥾 Land Activity: Snowshoeing": "https://thrllai.channel.io",
+    "⛷️ Land Activity: Skiing": "https://thrllai.channel.io",
+    "🚵 Land Activity: Mountain Biking": "https://thrllai.channel.io",
+    "🎒 Land Activity: Backpacking": "https://thrllai.channel.io",
+    "🧗 Land Activity: Rock Climbing": "https://thrllai.channel.io",
+    "🥾 Land Activity: Hiking": "https://thrllai.channel.io",
+    "🚁 Sky Activity: Helicopter Tour": "https://thrllai.channel.io",
+    "🎈 Sky Activity: Hot Air Ballooning": "https://thrllai.channel.io",
+    "🪂 Sky Activity: Paragliding": "https://thrllai.channel.io",
+    "🪂 Sky Activity: Skydiving": "https://thrllai.channel.io"
+    };
+
+    const experiences = Object.keys(experiencesUrls);
+
+    function getRandomColor() {
+        return '#' + Math.floor(Math.random()*16777215).toString(16);
+    }
+
+    function createTicket(index) {
+        const ticket = document.createElement('div');
+        ticket.classList.add('ticket');
+        
+        const universeRect = universe.getBoundingClientRect();
+        const left = Math.random() * (universeRect.width - 100);
+        const top = Math.random() * (universeRect.height - 250);
+        ticket.style.left = `${left}px`;
+        ticket.style.top = `${top}px`;
+
+        ticket.style.transform = `rotateY(${Math.random() * 360}deg) rotateX(${Math.random() * 360}deg) translateZ(${Math.random() * 200 - 100}px)`;
+        ticket.style.animation = `float ${5 + Math.random() * 10}s infinite ease-in-out`;
+        
+        const borderColor = getRandomColor();
+        ticket.style.borderColor = borderColor;
+        ticket.style.boxShadow = `0 0 10px ${borderColor}, 0 0 20px ${borderColor}`;
+        
+        const destination = experiences[Math.floor(Math.random() * experiences.length)];
+        const ticketContent = `
+            <div class="ticket-header">Adventure Ticket</div>
+            <div class="ticket-destination">${destination}</div>
+            <div class="ticket-footer">One Way to Wonder</div>
+        `;
+        
+        ticket.innerHTML = `
+            <div class="ticket-content">${ticketContent}</div>
+            <div class="ticket-content ticket-back">${ticketContent}</div>
+        `;
+        
+        ticket.addEventListener('click', () => {
+            window.open(experiencesUrls[destination], '_blank');
+        });
+
+        universe.appendChild(ticket);
+    }
+
+    for (let i = 0; i < ticketCount; i++) {
+        createTicket(i);
+    }
+});
+</script>

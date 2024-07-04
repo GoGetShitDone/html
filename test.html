@@ -1,0 +1,78 @@
+<div id="floating-images-container"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const style = document.createElement('style');
+    style.textContent = `
+        #floating-images-container {
+            position: relative;
+            width: 100%;
+            height: 100vw;
+            max-height: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+            background-color: #f0f0f000;
+        }
+        .floating-image {
+            position: absolute;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+        }
+        .floating-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        @keyframes gentleFloat {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(0, -1vw); }
+            100% { transform: translate(0, 0); }
+        }
+        @media (max-width: 768px) {
+            #floating-images-container {
+                height: 150vw;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    const container = document.getElementById('floating-images-container');
+    const imageUrls = [
+        'https://uploads-ssl.webflow.com/6673e23836aaa23fcbed42bc/668515ae6b3d051e71b61417_01.png',
+        'https://uploads-ssl.webflow.com/6673e23836aaa23fcbed42bc/668515ae4ce4f83a29353107_02.png',
+        'https://uploads-ssl.webflow.com/6673e23836aaa23fcbed42bc/668515ad74d81b9fd1ad5042_03.png',
+        'https://uploads-ssl.webflow.com/6673e23836aaa23fcbed42bc/668515ae9c95c2ce534044cd_04.png',
+        'https://uploads-ssl.webflow.com/6673e23836aaa23fcbed42bc/668515adf9a1b648fc545932_05.png',
+        'https://uploads-ssl.webflow.com/6673e23836aaa23fcbed42bc/668515adb99c327cf0c05960_06.png',
+        'https://uploads-ssl.webflow.com/6673e23836aaa23fcbed42bc/668515aef5afee5b1a00ead8_07.png',
+        'https://uploads-ssl.webflow.com/6673e23836aaa23fcbed42bc/668515aef8a1fc03cbc36224_08.png',
+        'https://uploads-ssl.webflow.com/6673e23836aaa23fcbed42bc/668515adcb4f00990ce02a2c_09.png',
+        'https://uploads-ssl.webflow.com/6673e23836aaa23fcbed42bc/66851fb4f8a1fc03cbc9672f_10.png',
+    ];
+
+    const imagePositions = [
+        { left: '20%', top: '5%', width: '60%', zIndex: 1 },
+        { left: '10%', top: '10%', width: '70%', zIndex: 2 },
+        { left: '0%', top: '-5%', width: '40%', zIndex: 3 },
+        { left: '40%', top: '-10%', width: '30%', zIndex: 4 },
+        { left: '60%', top: '5%', width: '30%', zIndex: 5 },
+        { left: '-10%', top: '25%', width: '40%', zIndex: 6 },
+        { left: '-10%', top: '60%', width: '60%', zIndex: 7 },
+        { left: '65%', top: '30%', width: '30%', zIndex: 8 },
+        { left: '45%', top: '50%', width: '60%', zIndex: 9 },
+        { left: '10%', top: '75%', width: '75%', zIndex: 10 },
+    ];
+
+    imageUrls.forEach((url, index) => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.classList.add('floating-image');
+        img.style.left = imagePositions[index].left;
+        img.style.top = imagePositions[index].top;
+        img.style.width = imagePositions[index].width;
+        img.style.zIndex = imagePositions[index].zIndex;
+        img.style.animation = `gentleFloat ${4 + Math.random() * 3}s infinite ease-in-out`;
+        img.style.animationDelay = `${Math.random() * 2}s`;
+        container.appendChild(img);
+    });
+});
+</script>

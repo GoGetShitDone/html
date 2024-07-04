@@ -1,0 +1,93 @@
+<div id="universe"></div>
+<div id="info-panel">
+    <h2>Thrll Your Life</h2>
+    <p>Welcome, traveler. Choose a card! Discover a new adventure!</p>
+    <p>Current visitors: <span id="visitor-count">1,337</span></p>
+</div>
+
+<style>
+#universe {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    perspective: 1000px;
+    overflow: visible;
+}
+.door {
+    position: absolute;
+    width: 100px;
+    height: 200px;
+    background: linear-gradient(45deg, #060840,#320505);
+    border: 2px solid #f6e921;
+    box-shadow: 0 0 10px #f6e921;
+    transform-style: preserve-3d;
+    transition: all 0.5s ease-in-out;
+    cursor: pointer;
+}
+.door:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #f6e921, 0 0 40px #f6e921;
+
+}
+#info-panel {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0px;
+    border-radius: 0px;
+    max-width: 0px;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px) rotateY(0deg); }
+    50% { transform: translateY(-20px) rotateY(180deg); }
+    100% { transform: translateY(0px) rotateY(360deg); }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const universe = document.getElementById('universe');
+    const doorCount = 50;
+    const experiences = [
+        "https://doorsofinfiniteexperiences.com/cyberpunk-metropolis",
+        "https://doorsofinfiniteexperiences.com/undersea-civilization",
+        "https://doorsofinfiniteexperiences.com/steampunk-airship",
+        "https://doorsofinfiniteexperiences.com/alien-desert-world",
+        "https://doorsofinfiniteexperiences.com/medieval-fantasy-realm",
+        "https://doorsofinfiniteexperiences.com/post-apocalyptic-wasteland",
+        "https://doorsofinfiniteexperiences.com/time-travel-laboratory",
+        "https://doorsofinfiniteexperiences.com/space-colony",
+        "https://doorsofinfiniteexperiences.com/prehistoric-jungle",
+        "https://doorsofinfiniteexperiences.com/virtual-reality-nexus"
+    ];
+
+    function createDoor(index) {
+        const door = document.createElement('div');
+        door.classList.add('door');
+        door.style.left = `${Math.random() * 90}%`;
+        door.style.top = `${Math.random() * 90}%`;
+        door.style.transform = `rotateY(${Math.random() * 360}deg) rotateX(${Math.random() * 360}deg) translateZ(${Math.random() * 500 - 250}px)`;
+        door.style.animation = `float ${5 + Math.random() * 10}s infinite ease-in-out`;
+        
+        door.addEventListener('click', () => {
+            const destination = experiences[Math.floor(Math.random() * experiences.length)];
+            window.open(destination, '_blank');
+        });
+
+        universe.appendChild(door);
+    }
+
+    for (let i = 0; i < doorCount; i++) {
+        createDoor(i);
+    }
+
+    setInterval(() => {
+        const visitorCount = document.getElementById('visitor-count');
+        const currentCount = parseInt(visitorCount.textContent.replace(',', ''));
+        const newCount = currentCount + Math.floor(Math.random() * 10) - 3;
+        visitorCount.textContent = newCount.toLocaleString();
+    }, 5000);
+});
+</script>
