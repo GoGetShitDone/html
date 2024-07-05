@@ -1,0 +1,65 @@
+<script>
+    // Select the form element and the loader elements 
+    const form = document.querySelector('#wf-form-generator');
+    const resultWrap = document.querySelector('#statement-component');
+    const resultLoader = document.querySelector('#statement-loader');
+    const resultText = document.querySelector('#statement-text');
+    
+    // Add a submit event listener to the form
+    form.addEventListener('submit', (event) => {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        
+        // Show the div that will contain the response and scroll to it
+        resultWrap.style.display = "block";
+        resultLoader.style.display = "flex";
+        resultWrap.scrollIntoView({behavior: "smooth"});
+        
+        // Get the values of the form fields
+        const name = document.getElementById('name').value;
+        const location = document.getElementById('location').value;
+        const interest = document.getElementById('interest').value;
+        const field = document.getElementById('field').value;
+        const bucket = document.getElementById('bucket').value;
+        
+        // Create the prompt string using the form field values
+    const prompt = `For ${name}, who is interested in ${interest} and wants to go to ${location}, please recommend explorations related to ${field}. 
+    
+    Here's the structure of the response I would like:
+    
+    1. Introduction and understanding the situation:
+       - Greet ${name}, mention their interest in ${interest} and their desire to visit ${location}, and express gratitude for sharing this information.
+       - Example: "Hi ${name}, it's great to hear that you're interested in ${interest} and want to visit ${location}. Let me recommend some exciting explorations for you."
+    
+    2. Recommendations for explorations related to ${interest} in ${location}:
+       - Provide recommendations for explorations related to ${interest} in ${location}.
+       - If there are no related explorations in ${location}, suggest alternative activities.
+       - Example: "In ${location}, you can explore ${field} related to ${interest}. If that's not available, consider trying these alternative activities: ..."
+    
+    3. Food recommendations during the explorations:
+       - Suggest some local foods that can be enjoyed while doing the recommended explorations.
+       - Example: "While exploring ${location}, don't miss out on trying these local dishes: ..."
+    
+    4. Conclusion with a motivational remark:
+       - Conclude by acknowledging their potential hesitation and encourage them to embark on the trip.
+       - Example: "I understand you might still have some reservations, but trust me, this adventure is worth it. Don't delay your trip any longer!"
+    
+    Make sure to personalize each section with the information provided.`;
+        
+            // Make an API call to our Make cenario
+        fetch('https://hook.us1.make.com/uq32g1m2ysk3tj5kfsqxt9bq1jedq51e', {
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                prompt: prompt, 
+              max_tokens: 100
+            })
+        })
+        // Then get the API response object, covert it to text and display it
+        .then(response => response.text())
+        .then(result => {
+            resultText.value = result;
+            resultLoader.style.display = "none";
+        });   
+    });
+    </script>
