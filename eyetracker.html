@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eye Tracking Demo</title>
+    <script src="https://webgazer.cs.brown.edu/webgazer.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .button {
+            width: 100px;
+            height: 50px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        #webgazerVideoContainer {
+            position: fixed !important;
+            top: 0 !important;
+            right: 0 !important;
+            width: 200px !important;
+            height: 150px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="button-container">
+            <button class="button" id="button1">Button 1</button>
+            <button class="button" id="button2">Button 2</button>
+            <button class="button" id="button3">Button 3</button>
+        </div>
+        <div id="result"></div>
+        <div>
+            <label for="sensitivity">민감도: </label>
+            <input type="range" id="sensitivity" min="1" max="10" value="5">
+        </div>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll('.button');
+        const result = document.getElementById('result');
+        const sensitivitySlider = document.getElementById('sensitivity');
+
+        let gazeData = { x: 0, y: 0 };
+        let buttonTimers = {};
+        let smoothX = 0, smoothY = 0;
+        let sensitivity = 0.5; // 기본 민감도
+
+        function clamp(value, min, max) {
+            return Math.min(Math.max(value, min), max);
+        }
+
+        webgazer.setGazeListener((data, timestamp) => {
+            if (data == null) return;
+            
+            // 스무딩 적용
+            smoothX = smoothX * (1 - sensitivity) + data.x * sensitivity;
+            smoothY = smoothY * (1 - sensitivity) + data.y * sensitivity;
+            
+            // 화면 범위 내로 제한
+            const x = clamp(smoothX, 0, window.innerWidth);
+            const y = clamp(smoothY, 0, window.innerHeight);
+            
+            gazeData = { x, y };
+
+            checkButtonGaze();
+        }).begin();
+
+        // webgazer 설정
+        webgazer.params.showVideo = true;
+        webgazer.params.showFaceOverlay = true;
+        webgazer.params.showFaceFeedbackBox = true;
+        webgazer.params.showPointCloud = true;
+        
+        // 정확도 향상을 위한 설정
+        webgazer.setRegression('ridge')
+                .setTracker('TFFacemesh')
+                .begin();
+
+        function isGazeOnButton(button) {
+            const rect = button.getBoundingClientRect();
+            return gazeData.x >= rect.left && gazeData.x <= rect.right &&
+                   gazeData.y >= rect.top && gazeData.y <= rect.bottom;
+        }
+
+        function checkButtonGaze() {
+            buttons.forEach(button => {
+                if (isGazeOnButton(button)) {
+                    if (!buttonTimers[button.id]) {
+                        buttonTimers[button.id] = setTimeout(() => {
+                            button.click();
+                        }, 1000);
+                    }
+                } else {
+                    clearTimeout(buttonTimers[button.id]);
+                    buttonTimers[button.id] = null;
+                }
+            });
+        }
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (result.textContent === '성공') {
+                    result.textContent = '';
+                } else {
+                    result.textContent = '성공';
+                }
+            });
+        });
+
+        sensitivitySlider.addEventListener('input', (e) => {
+            sensitivity = e.target.value / 10;
+        });
+
+        // 웹캠 비디오 피드를 우측 상단에 표시
+        webgazer.showVideoPreview(true).showPredictionPoints(true);
+
+        // 보정 함수
+        function calibrate() {
+            webgazer.clearData();
+            alert('화면의 각 모서리를 차례대로 3초씩 응시한 후 클릭해주세요.');
+        }
+
+        // 페이지 로드 시 보정 시작
+        window.onload = calibrate;
+
+        // 디버그 정보 표시
+        setInterval(() => {
+            console.log('Current gaze data:', gazeData);
+        }, 1000);
+    </script>
+</body>
+</html>
